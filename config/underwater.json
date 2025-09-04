@@ -1,0 +1,117 @@
+{
+    "name": "PGLAN_DDIM",
+    "phase": "train",
+    "gpu_ids": [
+        0
+    ],
+    "path": {
+        "stage": "train",
+        "log": "logs",
+        "tb_logger": "tb_logger",
+        "results": "results",
+        "checkpoint": "checkpoint",
+        "resume_state": "experiments_train/PGLAN_DDIM_250810_221448/checkpoint/bestmodel"
+
+    },
+    "datasets": {
+        "train": {
+            "name": "Water",
+            "mode": "HR",
+            "dataroot": "dataset/water_train_16_128",
+            "datatype": "img",
+            "l_resolution": 16,
+            "r_resolution": 256,
+            "batch_size": 4,
+            "num_workers": 2,
+            "use_shuffle": true,
+            "data_len": -1
+        },
+        "val": {
+            "name": "Water",
+            "mode": "HR",
+            "dataroot": "dataset/water_val_16_256",
+            "datatype": "img",
+            "l_resolution": 16,
+            "r_resolution": 256,
+            "data_len": -1
+        }
+    },
+    "model": {
+        "which_model_G": "trans",
+        "finetune_norm": false,
+        "unet": {
+            "in_channel": 6,
+            "out_channel": 3,
+            "inner_channel": 48,
+            "norm_groups": 24,
+            "channel_multiplier": [
+                1,
+                2,
+                4,
+                8,
+                8
+            ],
+            "attn_res": [
+                16
+            ],
+            "res_blocks": 2,
+            "dropout": 0
+        },
+        "beta_schedule": {
+            "train": {
+                "schedule": "linear",
+                "n_timestep": 2000,
+                "linear_start": 1e-6,
+                "linear_end": 1e-2
+            },
+            "val": {
+                "schedule": "linear",
+                "n_timestep": 2000,
+                "linear_start": 1e-6,
+                "linear_end": 1e-2
+            }
+        },
+        "diffusion": {
+            "image_size": 256,
+            "channels": 3,
+            "conditional": true
+        }
+    },
+    "train": {
+        "n_iter": 150000,
+        "val_freq": 2000,
+        "save_checkpoint_freq": 2000,
+        "print_freq": 2000,
+        "optimizer": {
+            "type": "adam",
+            "lr": 1e-5
+        },
+        "ema_scheduler": {
+            "step_start_ema": 5000,
+            "update_ema_every": 1,
+            "ema_decay": 0.9999
+        },
+        "l1_weight": 1,
+        "perceptual_weight": 3,
+        "ssim_weight":3,
+        "color_weight":1,
+        "stage": 1,
+        "scheduler": {
+        "type": "cosine",
+        "T_max": 200000,
+        "eta_min": 1e-4
+      }
+//        "l1_weight": 2,
+//        "perceptual_weight": 0,
+//        "ms_ssim_weight": 0,
+//        "laplacian_weight": 1,
+//        "color_weight": 1,
+//        "identity_weight_base": 0,
+//        "color_threshold": 0,
+//        "stage": 2
+
+    },
+    "wandb": {
+        "project": "PGLAN_DDIM"
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "epochs": 2000,
+  "batch_size": 8,
+  "learning_rate": 5e-4,
+  "base_channels": 32,
+  "resize": [256, 256],
+  "train_input": "dataset/train/input",
+  "train_gt": "dataset/train/gt",
+  "val_input": "dataset/val/input",
+  "val_gt": "dataset/val/gt",
+  "save_path": "checkpoints",
+  "resume": true,
+  "resume_path": "checkpoints/latest.pth",
+  "save_interval": 20,
+  "lambda_perceptual": 0.1,
+  "lambda_ssim": 0.3
+}
+
